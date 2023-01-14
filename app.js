@@ -11,6 +11,7 @@ app.use("/api/places", placesRoutes); // => /api/places/...
 // error handling middleware function
 // this function will only be executed on the requests that have an error attached to it
 app.use((error, req, res, next) => {
+  // check if a response has already been sent
   if (res.headerSent) {
     return next(error);
   }
