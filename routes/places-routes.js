@@ -33,11 +33,12 @@ router.get("/:pid", (req, res, next) => {
     return p.id === placeId;
   });
   if (!place) {
-    return res
-      .status(404)
-      .json({
-        message: "Could not found the place for the provided place id!",
-      });
+    // Synchronous code
+    const error = new Error(
+      "Could not find a place for the provided place id!"
+    );
+    error.code = 404;
+    throw error; // if you use throw, that already cancels the function execution
   }
   res.json({ place: place });
 });
@@ -48,9 +49,10 @@ router.get("/user/:uid", (req, res, next) => {
     return p.creator === userId;
   });
   if (!place) {
-    return res
-      .status(404)
-      .json({ message: "Could not found the place for the provided user id!" });
+    // Asynchronous code
+    const error = new Error("Could not find a place for the provided user id!");
+    error.code = 404;
+    return next(error);
   }
   res.json({ place });
 });
