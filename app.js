@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const placesRoutes = require("./routes/places-routes");
+const HttpError = require("./models/http-error");
 
 const app = express();
 
@@ -9,6 +10,11 @@ app.use(bodyParser.json());
 
 // outsource routes into separate files
 app.use("/api/places", placesRoutes); // => /api/places/...
+
+app.use((req, res, next) => {
+  const error = new HttpError("Could not find this route!", 404);
+  throw error;
+});
 
 // error handling middleware function
 // this function will only be executed on the requests that have an error attached to it
