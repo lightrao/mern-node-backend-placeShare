@@ -5,6 +5,8 @@ const placesRoutes = require("./routes/places-routes");
 
 const app = express();
 
+app.use(bodyParser.json());
+
 // outsource routes into separate files
 app.use("/api/places", placesRoutes); // => /api/places/...
 
