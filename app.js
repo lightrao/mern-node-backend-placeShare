@@ -7,7 +7,7 @@ const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
 const port = 5000;
-const dbName = "places";
+const dbName = "placesDB";
 
 const app = express();
 
