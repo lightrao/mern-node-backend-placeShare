@@ -1,9 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+require("dotenv").config;
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
+const port = 5000;
+const dbName = "places";
 
 const app = express();
 
@@ -29,4 +33,13 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-app.listen(5000);
+mongoose
+  .connect(
+    `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.ssgnute.mongodb.net/${dbName}?retryWrites=true&w=majority`
+  )
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Places Share App is listening on port ${port}...`);
+    });
+  })
+  .catch((err) => console.log(err));
