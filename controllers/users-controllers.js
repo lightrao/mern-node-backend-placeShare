@@ -41,7 +41,7 @@ const signup = async (req, res, next) => {
       new HttpError("Invalid input passed, please chech your data!", 422)
     );
   }
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
 
   let existingUser;
   try {
@@ -68,7 +68,7 @@ const signup = async (req, res, next) => {
     password,
     image:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Paracas_National_Reserve%2C_Ica%2C_Peru-3April2011.jpg/2880px-Paracas_National_Reserve%2C_Ica%2C_Peru-3April2011.jpg",
-    places,
+    places: [],
   });
 
   try {
