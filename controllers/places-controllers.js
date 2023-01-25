@@ -1,9 +1,11 @@
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("../util/location");
 const Place = require("../models/place");
+const User = require("../models/user");
 
 let DUMMY_PLACES = [
   {
@@ -48,6 +50,7 @@ const getPlaceById = async (req, res, next) => {
   try {
     place = await Place.findById(placeId);
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       "Something went wrong, could not find a place!",
       500
@@ -72,6 +75,7 @@ const getPlacesByUserId = async (req, res, next) => {
   try {
     places = await Place.find({ creator: userId });
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       "Fetching places failed, please try again later!",
       500
@@ -116,8 +120,32 @@ const createPlace = async (req, res, next) => {
     creator,
   });
 
+  let user;
   try {
-    await createdPlace.save();
+    user = await User.findById(creator);
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError(
+      "When creating place can't find relative user, please try again :(",
+      500
+    );
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError("Could not found user for provided id :(", 404);
+    return next(error);
+  }
+
+  try {
+    // first, we can create & store that new document with our new place.
+    // second, we can add the place ID to the corresponding user.
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await createdPlace.save({ session });
+    user.places.push(createdPlace);
+    await user.save({ session });
+    await session.commitTransaction();
   } catch (err) {
     console.log(err);
     const error = new HttpError(
@@ -145,6 +173,7 @@ const updatePlace = async (req, res, next) => {
   try {
     place = await Place.findById(placeId);
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       "Something went wrong, could not find place to be updating!",
       500
@@ -158,6 +187,7 @@ const updatePlace = async (req, res, next) => {
   try {
     await place.save();
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       "Something went wrong, could not update place!",
       500
@@ -175,6 +205,7 @@ const deletePlace = async (req, res, next) => {
   try {
     place = await Place.findById(placeId);
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       "Something went wrong, could not find the place for deleting!",
       500
