@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 
@@ -7,44 +6,8 @@ const getCoordsForAddress = require("../util/location");
 const Place = require("../models/place");
 const User = require("../models/user");
 
-let DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Empire State Building",
-    description: "A sky scraper.",
-    location: {
-      lat: 40.748447,
-      lng: -73.9871516,
-    },
-    address: "20 W 34th St, New York, NY 10001",
-    creator: "u1",
-  },
-  {
-    id: "p1",
-    title: "User One's Building",
-    description: "A sky scraper.",
-    location: {
-      lat: 40.748447,
-      lng: -73.9871516,
-    },
-    address: "20 W 34th St, New York, NY 10001",
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "Empire State Building2",
-    description: "A sky scraper2.",
-    location: {
-      lat: 40.748447,
-      lng: -73.9871516,
-    },
-    address: "20 W 34th St, New York, NY 10001",
-    creator: "u2",
-  },
-];
-
 const getPlaceById = async (req, res, next) => {
-  const placeId = req.params.pid; // req.params => { pid : "p1" }
+  const placeId = req.params.pid;
 
   let place;
   try {
@@ -58,7 +21,6 @@ const getPlaceById = async (req, res, next) => {
     return next(error);
   }
   if (!place) {
-    // asynchronous code
     const error = new HttpError(
       "Could not find a place for the provided place id!",
       404
@@ -71,7 +33,6 @@ const getPlaceById = async (req, res, next) => {
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
-  // let places;
   let userWithPlaces;
   try {
     userWithPlaces = await User.findById(userId).populate("places");
@@ -85,7 +46,6 @@ const getPlacesByUserId = async (req, res, next) => {
   }
 
   if (!userWithPlaces || userWithPlaces.places.length === 0) {
-    // Asynchronous code
     return next(
       new HttpError("Could not find places for the provided user id!", 404)
     );
