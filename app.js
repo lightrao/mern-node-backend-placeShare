@@ -7,11 +7,23 @@ const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
 const port = 5000;
-const dbName = "placesDB";
+const dbName = "mern";
 
 const app = express();
 
 app.use(bodyParser.json());
+
+// fix CORS error
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // which domain can access the backend
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  ); // allow which header come with request can access the backend
+  // allow which method from front end can access the backend
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  next();
+});
 
 // outsource routes into separate files
 app.use("/api/places", placesRoutes); // => /api/places/...
