@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -37,6 +39,10 @@ app.use((req, res, next) => {
 // error handling middleware function
 // this function will only be executed on the requests that have an error attached to it
 app.use((error, req, res, next) => {
+  // multer add file property to req object
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => console.log(err));
+  }
   // check if a response has already been sent
   if (res.headerSent) {
     return next(error);

@@ -52,8 +52,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     password,
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Paracas_National_Reserve%2C_Ica%2C_Peru-3April2011.jpg/2880px-Paracas_National_Reserve%2C_Ica%2C_Peru-3April2011.jpg",
+    image: req.file.path,
     places: [],
   });
 
