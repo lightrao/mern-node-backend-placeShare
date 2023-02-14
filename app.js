@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -14,6 +15,8 @@ const dbName = "mern";
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 // fix CORS error
 app.use((req, res, next) => {
