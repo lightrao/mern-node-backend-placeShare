@@ -119,7 +119,7 @@ const login = async (req, res, next) => {
   if (!existingUser) {
     const error = new HttpError(
       "The user is not exists, pleaase sign up.",
-      401
+      403
     );
     return next(error);
   }
@@ -136,7 +136,7 @@ const login = async (req, res, next) => {
   if (!isValidPassword) {
     const error = new HttpError(
       "Your password is wrong, please check again.",
-      401
+      403
     );
     return next(error);
   }

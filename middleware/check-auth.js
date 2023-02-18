@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
     if (!token) {
       const error = new HttpError(
         "Your have no token, can't be authenticated!",
-        401
+        403
       );
       return next(error);
     }
@@ -25,7 +25,7 @@ module.exports = (req, res, next) => {
     console.log(err);
     const error = new HttpError(
       "The headers not include authorization part OR token invalid, authentication failed!",
-      401
+      403
     );
     return next(error);
   }
