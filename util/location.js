@@ -1,4 +1,5 @@
 require("dotenv").config();
+// const API_KEY = process.env.GOOGLE_API_KEY;
 const API_KEY = null;
 
 const axios = require("axios");
