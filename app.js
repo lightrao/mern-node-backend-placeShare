@@ -9,7 +9,7 @@ require("dotenv").config;
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
-const port = 5000;
+const port = process.env.PORT || 5000;
 const dbName = "mern";
 
 const app = express();
