@@ -17,27 +17,32 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use("/uploads/images", express.static(path.join("uploads", "images")));
+app.use(express.static(path.join("public")));
 
 // fix CORS error
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // which domain can access the backend
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  ); // allow which header come with request can access the backend
-  // allow which method from front end can access the backend
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*"); // which domain can access the backend
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   ); // allow which header come with request can access the backend
+//   // allow which method from front end can access the backend
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+//   next();
+// });
 
 // outsource routes into separate files
 app.use("/api/places", placesRoutes); // => /api/places/...
 app.use("/api/users", usersRoutes);
 
 app.use((req, res, next) => {
-  const error = new HttpError("Could not find this route!", 404);
-  throw error;
+  res.sendFile(path.resolve(__dirname, "public", "index.html"));
 });
+
+// app.use((req, res, next) => {
+//   const error = new HttpError("Could not find this route!", 404);
+//   throw error;
+// });
 
 // error handling middleware function
 // this function will only be executed on the requests that have an error attached to it
